@@ -1,0 +1,64 @@
+var read = "",
+    write = "",
+    json = "",
+    checked = false,
+    nw = true,
+ opentab = false,
+ latch = false;
+
+function init() {
+   setInterval(check, 250);
+}
+
+function check() {
+   if(nw) {
+      nw = false;
+      fetch();
+   } else {
+      var id = $(read).attr("src").split("/")[$(read).attr("src").split("/").length-1].split(".")[0];
+      if(id == "template" && !checked) {
+         fetch();
+         checked = true;
+      } else if(id != "template") {
+         checked = false;
+         if($(write).val() == "") {
+     if(json[id] == undefined && opentab) {
+    if(!latch) {
+      latch = true;
+      window.open($("#tool-type .tool-type-img").attr("src"), '_blank')
+    }
+     } else if ($(read).attr("src")=="../client/img/words/medium/v235.png") {
+            $(write).val("generate");
+     } else if ($(read).attr("src")=="../client/img/words/hard/v235.png") {
+            $(write).val("removeoldcookie");
+     } else {
+            $(write).val(json[id]);
+     }
+   }
+  else {
+   latch = false; 
+  }
+      }
+   }
+}
+
+function fetch() {
+   $.ajax({
+      url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/199011/s0urce_io.json',
+      data: {},
+      dataType: 'json',
+      Method: 'GET',
+      success: function(data) {
+         json = data;
+         read = data._read;
+         write = data._write;
+         console.log("Fetched json");
+      },
+      error: function(error) {
+         console.log(error)
+      }
+   });
+}
+
+
+init();﻿
